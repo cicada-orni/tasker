@@ -1,0 +1,10 @@
+# Task fields (draft)
+
+- title (required)
+- description (optional)
+- status (todo/in_progress/done)
+- priority (low/medium/high)
+- due_date (optional)
+- tags (list of strings)
+- created_at (auto)
+- updated_at (auto)
