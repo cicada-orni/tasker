@@ -4,8 +4,14 @@ from tasker.exceptions import TaskNotFoundError, TaskAlreadyExistsError
 import uuid
 
 
-if __name__ == '__main__':
-    task_1 = Task(title='Laundry', description='Washing the clothes', tags=['urgent', 'must be done today'], status=Status.In_Progress, priority=Priority.High)
+if __name__ == "__main__":
+    task_1 = Task(
+        title="Laundry",
+        description="Washing the clothes",
+        tags=["urgent", "must be done today"],
+        status=Status.In_Progress,
+        priority=Priority.High,
+    )
 
     storage = TaskStorage()
     storage.add_task(task_1)

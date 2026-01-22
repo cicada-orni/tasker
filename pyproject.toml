@@ -3,6 +3,7 @@ name = "tasker"
 version = "0.1.0"
 dependencies = [
     "pydantic>=2.12.5",
+    "typer[all]>=0.21.1",
 ]
 
 [build-system]
@@ -15,6 +16,16 @@ package-dir = {"" = "src"}
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[dependency-groups]
+dev = [
+    "mypy>=1.19.1",
+    "pytest>=9.0.2",
+    "pytest-mock>=3.15.1",
+    "ruff>=0.14.13",
+]
+
+[project.scripts]
+tasker = "tasker.cli:app"
 
 
 
@@ -115,3 +126,5 @@ testpaths = [
     "tests",
     "integration",
 ]
+
+

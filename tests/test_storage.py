@@ -3,6 +3,7 @@ from tasker.exceptions import TaskNotFoundError, TaskAlreadyExistsError
 import pytest
 import uuid
 
+
 def test_storage(task_shopping, task_storage):
     task_storage.add_task(task_shopping)
     get_task = task_storage.get_task(task_shopping.task_id)
@@ -12,6 +13,3 @@ def test_storage(task_shopping, task_storage):
         task_storage.add_task(task_shopping)
     with pytest.raises(TaskNotFoundError):
         task_storage.get_task(uuid.uuid4())
-    
-
-
