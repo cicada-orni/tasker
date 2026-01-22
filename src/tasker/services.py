@@ -28,7 +28,7 @@ class TaskService:
         return clean_enum_value
 
     def create_task(self, **task_data: Unpack[TaskCreateArgs]) -> Task:
-        """g
+        """
         Pydantic will fill in 'status' and 'description' automatically.
         Example: TaskService.create_task(title="Buy Milk")
         """
@@ -51,6 +51,13 @@ class TaskService:
                 raise TaskValidationError(
                     f"{task_data['priority']} is not a valid priority."
                 )
+            
+        if 'tags' in task_data and isinstance(task_data['tags'], str):
+            cleaned_tags = [tag.strip() for tag in task_data['tags'].split(',')]
+            try:
+                task_data['tags'] = cleaned_tags
+            except ValidationError as e:
+                raise TaskValidationError(e) from e
 
         try:
             new_task = Task(**task_data)  # type: ignore
