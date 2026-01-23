@@ -21,12 +21,13 @@ class TaskCreateArgs(TypedDict, total=False):
 class TaskService:
     def __init__(self, storage: Storage) -> None:
         self.storage = storage
-
+    # ENUM Normalization
     def _normalize_enum_input(self, enum_value: str) -> str:
         splitted_enum = enum_value.replace("-", " ").split()
         clean_enum_value = "_".join(splitted_enum).lower()
         return clean_enum_value
-
+    
+    # CREATE LOGIC
     def create_task(self, **task_data: Unpack[TaskCreateArgs]) -> Task:
         """
         Pydantic will fill in 'status' and 'description' automatically.
@@ -67,8 +68,17 @@ class TaskService:
         except ValidationError as e:
             raise TaskValidationError(e) from e
 
+    # READ LOGIC
     def get_task(self, task_id: UUID) -> Task:
         return self.storage.get_task(task_id)
+    
+    def delete_task(self, task_id: str) -> Task:
+        return self.storage.delete_task(task_id)
+        
+        
 
+    # LIST LOGIC
     def list_tasks(self) -> list[Task]:
         return self.storage.list_tasks()
+    
+

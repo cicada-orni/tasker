@@ -5,6 +5,7 @@ from tasker.models import Task, Status, Priority
 from typing import Annotated
 from rich.console import Console
 from rich.table import Table
+from tasker.exceptions import TaskNotFoundError
 
 
 app = typer.Typer()
@@ -18,7 +19,7 @@ def main(ctx: typer.Context):
     storage = TaskStorage()
     service = TaskService(storage)
     ctx.obj = service
-
+# ADD
 @app.command()
 def add(ctx: typer.Context,  title: Annotated[str, typer.Argument(help='The name of the task')], description: Annotated[str | None, typer.Option(help="Task description")] = None, status: Annotated[str | None, typer.Option(help="Task status")] = None, priority: Annotated[str | None, typer.Option(help="Task priority")] = None, due_date: Annotated[str | None, typer.Option(help="Task due date")] = None, tags: Annotated[str | None, typer.Option(help="Task tags")] = None ):
     service: TaskService = ctx.obj
@@ -26,6 +27,24 @@ def add(ctx: typer.Context,  title: Annotated[str, typer.Argument(help='The name
     cleaned_task_args = {k: v for k, v in task_args.items() if v is not None}
     service.create_task(**cleaned_task_args)
     print(f"{title} task created successfully.")
+
+# DELETE
+@app.command()
+def delete(ctx: typer.Context, task_id: str):
+    service: TaskService = ctx.obj
+    try:
+        task = service.delete_task(task_id)
+        console.print(f"\n[bold green]✓[/bold green] Deleted Task: [white]{task.title}[/white] [dim]({str(task.task_id)[:8]})[/dim]")
+    except TaskNotFoundError:
+        console.print(f"\n[bold red]❌ Error:[/bold red] No task found starting with [yellow]'{task_id}'[/yellow]")
+        raise typer.Exit(code=1)
+    
+    except ValueError as e:
+        # This handles the "Ambiguous ID" case
+        console.print(f"\n[bold yellow]⚠ {e}[/bold yellow]")
+        console.print("Please provide more characters of the UUID to be specific.")
+        raise typer.Exit(code=1)
+
 
 @app.command("list")
 def list_tasks(ctx: typer.Context):
@@ -72,7 +91,9 @@ def list_tasks(ctx: typer.Context):
         )
         
     console.print(table)
-    
+
+
+
 
 
 

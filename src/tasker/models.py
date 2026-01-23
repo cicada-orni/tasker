@@ -34,3 +34,6 @@ class Task(BaseModel):
     tags: list[str] = Field(default_factory=list)
 
 
+# new_dict =  {'name': 'Faisal', 234: 1234}
+# for k in new_dict.keys():
+#     print(type(k))

@@ -3,7 +3,7 @@ from pydantic import ValidationError
 
 
 class TaskNotFoundError(Exception):
-    def __init__(self, task_id: UUID):
+    def __init__(self, task_id: UUID | str):
         self.task_id = task_id
         err_msg = f"Task with ID {task_id} not found in storage."
         super().__init__(err_msg)
